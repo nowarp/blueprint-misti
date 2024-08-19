@@ -22,7 +22,7 @@ export const config = {
 
 Now, try to run Misti:
 ```bash
-yarn blueprint misti
+yarn blueprint misti ./path/to/tact.config.json
 ```
 
 ## Resources

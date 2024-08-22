@@ -33,7 +33,7 @@ export function setTactStdlibPath(): string {
     "compiler",
     "stdlib",
   ];
-  const distPathPrefix = __dirname.includes("/dist/") ? "../../.." : "../..";
+  const distPathPrefix = __dirname.includes("/dist/") ? "../.." : "..";
   return path.resolve(__dirname, distPathPrefix, ...stdlib_path_elements);
 }
 

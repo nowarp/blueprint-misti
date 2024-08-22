@@ -6,12 +6,13 @@ A plugin for the [Blueprint Framework](https://github.com/ton-org/blueprint/) th
 
 Add this plugin to the `package.json` of your Blueprint project by running:
 ```bash
+yarn add tact
 yarn add @nowarp/blueprint-misti
 ```
 
 Then, add this configuration to `blueprint.config.ts`:
 ```ts
-import { MistiPlugin } from 'blueprint-misti';
+import { MistiPlugin } from '@nowarp/blueprint-misti';
 export const config = {
   plugins: [
     new MistiPlugin(),

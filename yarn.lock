@@ -331,10 +331,10 @@
     multiformats "^9.5.4"
     murmurhash3js-revisited "^3.0.0"
 
-"@nowarp/misti@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.2.0.tgz#7a10f2022bdd45a202b1f884480de646bfa00985"
-  integrity sha512-lG3eL0yOnDx3kQxjxuuA8niyAVvZd8xYoesPAtllZldIw0yVflyXAXgnlLAw7/rH+uIJ7s86o4ypvOsPtVEheA==
+"@nowarp/misti@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.2.2.tgz#1cbd98e07a9a4b104fb2f147785ac9e3573a69a8"
+  integrity sha512-3U2Z1/TLhbLEjZkxkPbvydgT8lS/Q7EGelZAq4Clp/uTesCO15kKxOic7kk+KNEN1AX9GkSkEQdDoty1XP3Jgg==
   dependencies:
     "@tact-lang/compiler" "^1.4.4"
     "@types/js-yaml" "^4.0.9"

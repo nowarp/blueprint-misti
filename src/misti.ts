@@ -25,15 +25,11 @@ function hasStdlibPath(args: string[]): boolean {
   return args.find((a) => a === STDLIB_PATH_ARG) !== undefined;
 }
 
-// TODO: Defined in Misti API since the next version.
 export function setTactStdlibPath(): string {
-  const stdlib_path_elements = [
-    "node_modules",
-    "@tact-lang",
-    "compiler",
-    "stdlib",
-  ];
-  const distPathPrefix = __dirname.includes("/dist/") ? "../.." : "..";
+  const stdlib_path_elements = ["@tact-lang", "compiler", "stdlib"];
+  const distPathPrefix = __dirname.includes("/dist/")
+    ? "../../../.."
+    : "../../..";
   return path.resolve(__dirname, distPathPrefix, ...stdlib_path_elements);
 }
 

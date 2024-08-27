@@ -96,7 +96,12 @@ export const misti: Runner = async (args: Args, ui: UIProvider) => {
   setStdlibPath(argsStr);
   const result = await runMistiCommand(argsStr);
   if (result.errorsFound === 0 || result.output === undefined) {
-    ui.write(`✅ No errors found`);
+    if (result.error) {
+      // They are already printed to stderr by the driver
+      ui.write("⚠️ There are some problems executing Misti");
+    } else {
+      ui.write("✅ No errors found");
+    }
   } else {
     ui.write(`❌ Misti found ${result.errorsFound} errors:\n${result.output}`);
   }

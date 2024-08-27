@@ -1,6 +1,6 @@
 {
   "name": "@nowarp/blueprint-misti",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Bluerpint Misti Plugin",
   "main": "dist/index.js",
   "author": "Georgiy Komarov <jubnzv@gmail.com>",

@@ -27,9 +27,12 @@ function hasStdlibPath(args: string[]): boolean {
 
 export function setTactStdlibPath(): string {
   const stdlib_path_elements = ["@tact-lang", "compiler", "stdlib"];
-  const distPathPrefix = __dirname.includes("/dist/")
+  let distPathPrefix = __dirname.includes("/dist/")
     ? "../../../.."
     : "../../..";
+  if (__dirname.includes(".pnpm")) {
+    distPathPrefix = path.join("..", distPathPrefix);
+  }
   return path.resolve(__dirname, distPathPrefix, ...stdlib_path_elements);
 }
 

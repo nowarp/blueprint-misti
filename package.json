@@ -59,6 +59,10 @@
   "files": [
     "dist/**/*"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "release-it": {
     "hooks": {
       "before:release": "yarn clean && yarn build",

@@ -19,7 +19,8 @@
     "blueprint"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "tsc",
+    "clean": "rm -rf dist",
     "fmt": "prettier --write src",
     "release": "yarn release-it"
   },

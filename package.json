@@ -46,7 +46,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@babel/traverse": "^7.23.6",
     "@babel/types": "^7.23.6",
-    "@nowarp/misti": "^0.2.2",
+    "@nowarp/misti": "^0.3.0",
     "arg": "^5.0.2"
   },
   "prettier": {

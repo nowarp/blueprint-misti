@@ -1,5 +1,5 @@
 import { Runner, Args, UIProvider } from "@ton/blueprint";
-import { runMistiCommand } from "@nowarp/misti/dist/src/cli";
+import { runMistiCommand } from "@nowarp/misti/dist/cli";
 import path from "path";
 import fs from "fs";
 

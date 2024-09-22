@@ -94,15 +94,15 @@ export const misti: Runner = async (args: Args, ui: UIProvider) => {
   ui.write("⏳ Checking the project...\n");
   const argsStr = argsToStringList(args).slice(1);
   setStdlibPath(argsStr);
-  const result = await runMistiCommand(argsStr);
-  if (result.errorsFound === 0 || result.output === undefined) {
+  const result = (await runMistiCommand(argsStr))!;
+  if (result.warningsFound === 0 || result.output === undefined) {
     if (result.error) {
       // They are already printed to stderr by the driver
       ui.write("⚠️ There are some problems executing Misti");
     } else {
-      ui.write("✅ No errors found");
+      ui.write("✅ No warnings found");
     }
   } else {
-    ui.write(`❌ Misti found ${result.errorsFound} errors:\n${result.output}`);
+    ui.write(`❌ Misti found ${result.warningsFound} warnings:\n${result.output}`);
   }
 };

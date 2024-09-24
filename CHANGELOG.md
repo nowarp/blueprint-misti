@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Misti 0.3.1 support
+
 ## [0.3.1] - 2024-09-22
 ### Fixed
-- API compatibility issues.
+- API compatibility issues
 
 ## [0.3.0] - 2024-09-22
 ### Added
-- Misti 0.3.0 support.
+- Misti 0.3.0 support

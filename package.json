@@ -1,7 +1,7 @@
 {
   "name": "@nowarp/blueprint-misti",
   "version": "0.3.1",
-  "description": "Bluerpint Misti Plugin",
+  "description": "Blueprint Misti Plugin",
   "bugs": "https://github.com/nowarp/blueprint-misti/issues",
   "main": "dist/index.js",
   "author": "Georgiy Komarov <jubnzv@gmail.com>",
@@ -21,7 +21,11 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "fmt": "prettier --write src",
+    "fmt": "prettier --check src",
+    "lint": "eslint src",
+    "spell": "cspell \"**\" --no-progress --exclude \"dist/**\" --exclude \"node_modules/**\" --exclude \"tags/**\" --exclude \"docs/**\"",
+    "fix-all": "yarn fmt --write && yarn lint --fix",
+    "test-all": "yarn spell && yarn knip && yarn fmt && yarn lint",
     "release": "yarn release-it"
   },
   "devDependencies": {
@@ -30,10 +34,13 @@
     "@ton/core": "^0.53.0",
     "@ton/crypto": "^3.2.0",
     "@ton/ton": "^13.9.0",
-    "@types/babel__generator": "^7.6.8",
-    "@types/babel__traverse": "^7.20.4",
     "@types/node": "^20.2.5",
-    "prettier": "^3.2.5",
+    "@typescript-eslint/eslint-plugin": "^7.0.4",
+    "@typescript-eslint/parser": "^7.0.4",
+    "cspell": "^8.14.4",
+    "eslint": "^8.57.0",
+    "knip": "^5.30.5",
+    "prettier": "^3.3.3",
     "release-it": "^17.6.0",
     "typescript": "^4.9.5"
   },
@@ -44,14 +51,7 @@
     "@ton/ton": ">=13.4.1"
   },
   "dependencies": {
-    "@babel/core": "^7.23.6",
-    "@babel/generator": "^7.23.6",
-    "@babel/parser": "^7.23.6",
-    "@babel/preset-typescript": "^7.23.3",
-    "@babel/traverse": "^7.23.6",
-    "@babel/types": "^7.23.6",
-    "@nowarp/misti": "^0.3.0",
-    "arg": "^5.0.2"
+    "@nowarp/misti": "^0.3.1"
   },
   "prettier": {
     "semi": true,
@@ -66,7 +66,7 @@
   },
   "release-it": {
     "hooks": {
-      "before:release": "yarn clean && yarn build",
+      "before:release": "yarn clean && yarn test-all && yarn build",
       "after:bump": "yarn build"
     },
     "github": {

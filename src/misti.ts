@@ -103,6 +103,8 @@ export const misti: Runner = async (args: Args, ui: UIProvider) => {
       ui.write("✅ No warnings found");
     }
   } else {
-    ui.write(`❌ Misti found ${result.warningsFound} warnings:\n${result.output}`);
+    ui.write(
+      `❌ Misti found ${result.warningsFound} warnings:\n${result.output}`,
+    );
   }
 };

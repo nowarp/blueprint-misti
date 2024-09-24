@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "nowarp",
+    "Georgiy",
+    "Komarov"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "tags",
+    "*.fif",
+    "node_modules",
+    "dist"
+  ]
+}

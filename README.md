@@ -6,7 +6,7 @@ A plugin for the [Blueprint Framework](https://github.com/ton-org/blueprint/) th
 
 Add this plugin to the `package.json` of your Blueprint project by running:
 ```bash
-yarn add tact
+yarn add @tact-lang/compiler
 yarn add @nowarp/blueprint-misti
 ```
 

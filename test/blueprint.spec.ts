@@ -29,7 +29,7 @@ describe("extractProjectInfo", () => {
       };
     `;
     fs.writeFileSync(compileFilePath, compileFileContent);
-    const result: TactProjectInfo = await extractProjectInfo(compileFilePath);
+    const result: TactProjectInfo = await extractProjectInfo(projectName);
     expect(result).toEqual({
       projectName,
       target: "contracts/test1.tact",
@@ -50,7 +50,7 @@ describe("extractProjectInfo", () => {
       };
     `;
     fs.writeFileSync(compileFilePath, compileFileContent);
-    await expect(extractProjectInfo(compileFilePath)).rejects.toThrow(
+    await expect(extractProjectInfo(projectName)).rejects.toThrow(
       "FunC projects are not currently supported: https://github.com/nowarp/misti/issues/56",
     );
   });

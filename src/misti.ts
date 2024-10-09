@@ -1,5 +1,6 @@
 import { Runner, Args, UIProvider } from "@ton/blueprint";
 import { MistiExecutor } from "./executor";
+import { Sym } from "./util";
 import { MistiResult, resultToString } from "@nowarp/misti/dist/cli";
 
 /**
@@ -10,14 +11,14 @@ function handleResult(result: MistiResult, ui: UIProvider): void {
   switch (result.kind) {
     case "warnings":
       ui.write(
-        `⚠️ Misti found ${result.warnings.reduce((acc, out) => acc + out.warnings.length, 0)} warnings:\n${resultStr}`,
+        `${Sym.WARN} Misti found ${result.warnings.reduce((acc, out) => acc + out.warnings.length, 0)} warnings:\n${resultStr}`,
       );
       break;
     case "error":
-      ui.write(`❌ ${resultStr}`);
+      ui.write(`${Sym.ERR} ${resultStr}`);
       break;
     case "ok":
-      ui.write(`✅ ${resultStr}`);
+      ui.write(`${Sym.OK} ${resultStr}`);
       break;
     case "tool":
       ui.write(resultStr);

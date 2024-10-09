@@ -4,19 +4,14 @@
  * @packageDocumentation
  */
 
+import { Args, UIProvider } from "@ton/blueprint";
 import {
-  createSourceFile,
-  ScriptTarget,
-  Node,
-  isVariableDeclaration,
-  ObjectLiteralExpression,
-  isPropertyAssignment,
-  StringLiteral,
-  Expression,
-  forEachChild,
-} from "typescript";
-import { Args } from "@ton/blueprint";
-import { promises as fs } from "fs";
+  getCompilablesDirectory,
+  COMPILE_END,
+} from "@ton/blueprint/dist/compile/compile";
+import { CompilerConfig } from "@ton/blueprint/dist/compile/CompilerConfig";
+import { ConfigProject } from "@tact-lang/compiler";
+import { Sym } from "./util";
 import path from "path";
 
 /**
@@ -25,67 +20,24 @@ import path from "path";
 export type TactProjectInfo = {
   projectName: string;
   target: string;
-  options: Record<string, unknown>;
+  options?: ConfigProject["options"];
 };
 
 /**
- * Blueprint generates TypeScript wrappers that define compilation options in
- * the following format:
+ * Extracts the `CompilerConifg` from the given project name.
  *
- * ```typescript
- * import { CompilerConfig } from '@ton/blueprint';
- * export const compile: CompilerConfig = {
- *     lang: 'tact',
- *     target: 'contracts/test1.tact',
- *     options: {
- *         debug: true,
- *     },
- * };
- * ```
- *
- * This function extracts the `target` and `options` values parsing the wrapper file.
+ * XXX: Imported from blueprint, since the original function is private:
+ *      https://github.com/ton-org/blueprint/issues/151
  */
-async function parseCompileWrapper(
-  filePath: string,
-): Promise<TactProjectInfo | undefined> {
-  const projectName = path.basename(filePath).replace(".compile.ts", "");
-  const content = await fs.readFile(filePath, "utf-8");
-  const sourceFile = createSourceFile(
-    filePath,
-    content,
-    ScriptTarget.ESNext,
-    true,
-  );
-  let target: string | undefined;
-  let options: Record<string, unknown> = {} as Record<string, unknown>;
-  function findNodes(node: Node) {
-    if (isVariableDeclaration(node) && node.name.getText() === "compile") {
-      const initializer = node.initializer as ObjectLiteralExpression;
-      for (const property of initializer.properties) {
-        if (isPropertyAssignment(property)) {
-          if (property.name.getText() === "target") {
-            target = (property.initializer as StringLiteral).text;
-          }
-          if (property.name.getText() === "options") {
-            const optionsObj: Record<string, unknown> = {};
-            (
-              property.initializer as ObjectLiteralExpression
-            ).properties.forEach((prop) => {
-              if (isPropertyAssignment(prop)) {
-                optionsObj[prop.name.getText()] = (
-                  prop.initializer as Expression
-                ).getText();
-              }
-            });
-            options = optionsObj;
-          }
-        }
-      }
-    }
-    forEachChild(node, findNodes);
+async function getCompilerConfigForContract(
+  name: string,
+): Promise<CompilerConfig> {
+  const compilablesDirectory = await getCompilablesDirectory();
+  const mod = await import(path.join(compilablesDirectory, name + COMPILE_END));
+  if (typeof mod.compile !== "object") {
+    throw new Error(`Object 'compile' is missing`);
   }
-  findNodes(sourceFile);
-  return target ? { projectName, target, options } : undefined;
+  return mod.compile;
 }
 
 /**
@@ -93,10 +45,33 @@ async function parseCompileWrapper(
  */
 export async function extractProjectInfo(
   blueprintCompilePath: string,
+  ui: UIProvider,
 ): Promise<TactProjectInfo | undefined> {
   const filePath = path.resolve(__dirname, blueprintCompilePath);
-  console.log("Parsing", filePath);
-  return parseCompileWrapper(filePath);
+  const projectName = path.basename(filePath).replace(".compile.ts", "");
+  let compilerConfig: CompilerConfig;
+  try {
+    compilerConfig = await getCompilerConfigForContract(projectName);
+  } catch {
+    return undefined;
+  }
+  switch (compilerConfig.lang) {
+    case "func":
+      ui.write(
+        `${Sym.ERR} FunC projects are not currently supported: https://github.com/nowarp/misti/issues/56`,
+      );
+      return undefined;
+    case "tact":
+      return {
+        projectName,
+        target: compilerConfig.target,
+        options: compilerConfig.options,
+      };
+    default:
+      // XXX: It might be *anything* according to the Blueprint API
+      ui.write(`${Sym.ERR} Please specify \`lang\` property in ${filePath}`);
+      return undefined;
+  }
 }
 
 /**

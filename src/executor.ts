@@ -1,5 +1,6 @@
 import { Args, UIProvider } from "@ton/blueprint";
 import { findCompiles, selectFile } from "@ton/blueprint/dist/utils";
+import { Sym } from "./util";
 import {
   TactProjectInfo,
   extractProjectInfo,
@@ -30,17 +31,17 @@ async function selectProject(
   if (!fs.existsSync(result.path)) {
     ui.write(
       [
-        `❌ Cannot access ${result.path}`,
+        `${Sym.ERR} Cannot access ${result.path}`,
         "Please specify path to your contract directly: `yarn blueprint misti path/to/contract.tact`",
       ].join("\n"),
     );
     return undefined;
   }
-  const projectInfo = await extractProjectInfo(result.path);
+  const projectInfo = await extractProjectInfo(result.path, ui);
   if (projectInfo === undefined) {
     ui.write(
       [
-        `❌ Cannot extract project information from ${result.path}`,
+        `${Sym.ERR} Cannot extract project information from ${result.path}`,
         "Please specify path to your contract directly: `yarn blueprint misti path/to/contract.tact`",
       ].join("\n"),
     );
@@ -94,7 +95,7 @@ export class MistiExecutor {
       argsStr.push(tactPath);
       return new MistiExecutor(project.projectName, argsStr, ui);
     } catch {
-      ui.write("❌ Cannot create a Tact config in current directory");
+      ui.write(`${Sym.ERR} Cannot create a Tact config in current directory`);
       return undefined;
     }
   }
@@ -110,15 +111,16 @@ export class MistiExecutor {
     config: TactProjectInfo,
     outDir: string,
   ): string | never {
+    const project: any = {
+      name: config.projectName,
+      path: config.target,
+      output: path.join(os.tmpdir(), "tact-output"),
+    };
+    if (config.options !== undefined) {
+      project.options = config.options;
+    }
     const content = JSON.stringify({
-      projects: [
-        {
-          name: config.projectName,
-          path: config.target,
-          output: path.join(os.tmpdir(), "tact-output"),
-          options: config.options,
-        },
-      ],
+      projects: [project],
     });
     const outPath = path.join(outDir, "tact.config.json");
     fs.writeFileSync(outPath, content);
@@ -126,7 +128,7 @@ export class MistiExecutor {
   }
 
   public async execute(): Promise<MistiResult> {
-    this.ui.write(`⏳ Checking ${this.projectName}...\n`);
+    this.ui.write(`${Sym.WAIT} Checking ${this.projectName}...\n`);
     setStdlibPath(this.args);
     // ! is safe: it could not be undefined in Misti 0.4+
     const result = (await runMistiCommand(this.args))!;

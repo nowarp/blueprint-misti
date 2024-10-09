@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Misti 0.4.0 support
+- Improved Blueprint integration: PR [#7](https://github.com/nowarp/misti/pulls/7)
+- Added `--blueprint-project` CLI argument to set the project name
+
 ## [0.3.2] - 2024-09-24
 
 ### Added

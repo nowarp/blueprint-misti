@@ -4,13 +4,15 @@ A plugin for the [Blueprint Framework](https://github.com/ton-org/blueprint/) th
 
 ## Getting Started
 
-Add this plugin to the `package.json` of your Blueprint project by running:
+1. [Install Soufflé](https://souffle-lang.github.io/install) to use all detectors provided by Misti.
+
+2. Add this plugin as a dependency of your Blueprint project:
 ```bash
 yarn add @tact-lang/compiler
 yarn add @nowarp/blueprint-misti
 ```
 
-Then, add this configuration to `blueprint.config.ts`:
+3. Add this configuration to `blueprint.config.ts`:
 ```ts
 import { MistiPlugin } from '@nowarp/blueprint-misti';
 export const config = {
@@ -20,12 +22,19 @@ export const config = {
 };
 ```
 
-Now, try to run Misti:
+## Usage
+
+Run the following command:
 ```bash
-yarn blueprint misti ./path/to/tact.config.json
+yarn blueprint misti
 ```
+
+It will run the analysis of the available project, if there is one, or show an interactive window to select a project:
+
+![img](./img/select-project.png)
+
+See the [documentation](https://nowarp.io/tools/misti/) for the available configuration options.
 
 ## Resources
 * [Misti: GitHub](https://github.com/nowarp/misti)
-* [Misti: Documentation](https://nowarp.github.io/tools/misti/)
-* [Blueprint: GitHub](https://github.com/ton-org/blueprint)
+* [Misti Documentation: Using with Blueprint](https://nowarp.io/tools/misti/docs/tutorial/blueprint)

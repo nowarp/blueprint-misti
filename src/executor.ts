@@ -22,32 +22,21 @@ import os from "os";
 async function selectProject(
   ui: UIProvider,
   args: Args,
-): Promise<TactProjectInfo | undefined> {
+): Promise<TactProjectInfo> | never {
   const result = await selectFile(await findCompiles(), {
     ui,
     hint: args._.length > 1 && args._[1].length > 0 ? args._[1] : undefined,
     import: false,
   });
   if (!fs.existsSync(result.path)) {
-    ui.write(
+    throw new Error(
       [
         `${Sym.ERR} Cannot access ${result.path}`,
         "Please specify path to your contract directly: `yarn blueprint misti path/to/contract.tact`",
       ].join("\n"),
     );
-    return undefined;
   }
-  const projectInfo = await extractProjectInfo(result.path, ui);
-  if (projectInfo === undefined) {
-    ui.write(
-      [
-        `${Sym.ERR} Cannot extract project information from ${result.path}`,
-        "Please specify path to your contract directly: `yarn blueprint misti path/to/contract.tact`",
-      ].join("\n"),
-    );
-    return undefined;
-  }
-  return projectInfo;
+  return await extractProjectInfo(result.path);
 }
 
 export class MistiExecutor {
@@ -59,7 +48,7 @@ export class MistiExecutor {
   public static async fromArgs(
     args: Args,
     ui: UIProvider,
-  ): Promise<MistiExecutor | undefined> {
+  ): Promise<MistiExecutor> | never {
     let argsStr = argsToStringList(args).slice(1);
     const command = createMistiCommand();
 
@@ -89,14 +78,12 @@ export class MistiExecutor {
 
     // Interactively select the project
     const project = await selectProject(ui, args);
-    if (!project) return undefined;
     try {
       const tactPath = this.generateTactConfig(project, ".");
       argsStr.push(tactPath);
       return new MistiExecutor(project.projectName, argsStr, ui);
     } catch {
-      ui.write(`${Sym.ERR} Cannot create a Tact config in current directory`);
-      return undefined;
+      throw new Error(`Cannot create a Tact config in current directory`);
     }
   }
 

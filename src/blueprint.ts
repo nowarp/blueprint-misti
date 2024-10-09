@@ -4,14 +4,13 @@
  * @packageDocumentation
  */
 
-import { Args, UIProvider } from "@ton/blueprint";
+import { Args } from "@ton/blueprint";
 import {
   getCompilablesDirectory,
   COMPILE_END,
 } from "@ton/blueprint/dist/compile/compile";
 import { CompilerConfig } from "@ton/blueprint/dist/compile/CompilerConfig";
 import { ConfigProject } from "@tact-lang/compiler";
-import { Sym } from "./util";
 import path from "path";
 
 /**
@@ -45,22 +44,15 @@ async function getCompilerConfigForContract(
  */
 export async function extractProjectInfo(
   blueprintCompilePath: string,
-  ui: UIProvider,
-): Promise<TactProjectInfo | undefined> {
+): Promise<TactProjectInfo> | never {
   const filePath = path.resolve(__dirname, blueprintCompilePath);
   const projectName = path.basename(filePath).replace(".compile.ts", "");
-  let compilerConfig: CompilerConfig;
-  try {
-    compilerConfig = await getCompilerConfigForContract(projectName);
-  } catch {
-    return undefined;
-  }
+  const compilerConfig = await getCompilerConfigForContract(projectName);
   switch (compilerConfig.lang) {
     case "func":
-      ui.write(
-        `${Sym.ERR} FunC projects are not currently supported: https://github.com/nowarp/misti/issues/56`,
+      throw new Error(
+        "FunC projects are not currently supported: https://github.com/nowarp/misti/issues/56",
       );
-      return undefined;
     case "tact":
       return {
         projectName,
@@ -69,8 +61,7 @@ export async function extractProjectInfo(
       };
     default:
       // XXX: It might be *anything* according to the Blueprint API
-      ui.write(`${Sym.ERR} Please specify \`lang\` property in ${filePath}`);
-      return undefined;
+      throw new Error(`Please specify \`lang\` property in ${filePath}`);
   }
 }
 

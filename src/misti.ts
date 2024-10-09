@@ -27,10 +27,21 @@ function handleResult(result: MistiResult, ui: UIProvider): void {
 }
 
 export const misti: Runner = async (args: Args, ui: UIProvider) => {
-  const executor = await MistiExecutor.fromArgs(args, ui);
-  if (!executor) {
-    return;
+  try {
+    const executor = await MistiExecutor.fromArgs(args, ui);
+    const result = await executor.execute();
+    handleResult(result, ui);
+  } catch (err) {
+    if (err instanceof Error) {
+      ui.write(`${Sym.ERR} ${err.message}`);
+      return;
+    } else {
+      ui.write(
+        [
+          `${Sym.ERR} Unknown error: ${JSON.stringify(err)}`,
+          "Please report it: https://github.com/nowarp/blueprint-misti/issues",
+        ].join("\n"),
+      );
+    }
   }
-  const result = await executor.execute();
-  handleResult(result, ui);
 };

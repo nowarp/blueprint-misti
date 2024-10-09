@@ -8,7 +8,6 @@ A plugin for the [Blueprint Framework](https://github.com/ton-org/blueprint/) th
 
 2. Add this plugin as a dependency of your Blueprint project:
 ```bash
-yarn add @tact-lang/compiler
 yarn add @nowarp/blueprint-misti
 ```
 

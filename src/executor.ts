@@ -36,7 +36,7 @@ async function selectProject(
       ].join("\n"),
     );
   }
-  return await extractProjectInfo(result.path);
+  return await extractProjectInfo(result.name);
 }
 
 export class MistiExecutor {
@@ -50,8 +50,24 @@ export class MistiExecutor {
     ui: UIProvider,
   ): Promise<MistiExecutor> | never {
     let argsStr = argsToStringList(args).slice(1);
+
+    // Find and remove --blueprint-project argument
+    // That's a blueprint-misti argument, not a Misti argument
+    let blueprintProjectName: string | undefined;
+    const projectIndex = argsStr.indexOf("--blueprint-project");
+    if (projectIndex !== -1) {
+      if (projectIndex + 1 < argsStr.length) {
+        blueprintProjectName = argsStr[projectIndex + 1];
+        argsStr.splice(projectIndex, 2); // Remove --blueprint-project and its value
+      } else {
+        throw new Error("--blueprint-project argument is missing a value");
+      }
+    }
+
     const command = createMistiCommand();
 
+    // XXX: This hack is required because Misti v0.4 requires a path to the
+    // project/contract to be specified in order to parse arguments.
     let tactPathIsDefined = true;
     const originalArgsStr = [...argsStr];
     try {
@@ -74,16 +90,19 @@ export class MistiExecutor {
       const tactPath = command.args[0];
       const projectName = path.basename(tactPath).split(".")[0];
       return new MistiExecutor(projectName, argsStr, ui);
-    }
-
-    // Interactively select the project
-    const project = await selectProject(ui, args);
-    try {
-      const tactPath = this.generateTactConfig(project, ".");
-      argsStr.push(tactPath);
-      return new MistiExecutor(project.projectName, argsStr, ui);
-    } catch {
-      throw new Error(`Cannot create a Tact config in current directory`);
+    } else {
+      const project = blueprintProjectName
+        ? // The user has specified the project name using --blueprint-project
+          await extractProjectInfo(blueprintProjectName)
+        : // Interactively select the project
+          await selectProject(ui, args);
+      try {
+        const tactPath = this.generateTactConfig(project, ".");
+        argsStr.push(tactPath);
+        return new MistiExecutor(project.projectName, argsStr, ui);
+      } catch {
+        throw new Error(`Cannot create a Tact config in current directory`);
+      }
     }
   }
 

@@ -23,7 +23,7 @@ export type TactProjectInfo = {
 };
 
 /**
- * Extracts the `CompilerConifg` from the given project name.
+ * Extracts the `CompilerConfig` from the given project name.
  *
  * XXX: Imported from blueprint, since the original function is private:
  *      https://github.com/ton-org/blueprint/issues/151

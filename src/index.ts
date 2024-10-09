@@ -10,7 +10,7 @@ export class MistiPlugin implements Plugin {
         help: `Usage: blueprint misti [flags]
 
 Runs the Misti static analyzer to find security flaws in the project.
-See more: https://nowarp.github.io/tools/misti`,
+See more: https://nowarp.io/tools/misti/docs/tutorial/blueprint`,
       },
     ];
   }

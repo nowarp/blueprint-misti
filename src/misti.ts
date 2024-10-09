@@ -10,9 +10,7 @@ function handleResult(result: MistiResult, ui: UIProvider): void {
   const resultStr = resultToString(result, "plain");
   switch (result.kind) {
     case "warnings":
-      ui.write(
-        `${Sym.WARN} Misti found ${result.warnings.reduce((acc, out) => acc + out.warnings.length, 0)} warnings:\n${resultStr}`,
-      );
+      ui.write(resultStr);
       break;
     case "error":
       ui.write(`${Sym.ERR} ${resultStr}`);

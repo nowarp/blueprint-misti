@@ -68,8 +68,8 @@ export class MistiExecutor {
       await command.parseAsync(argsStr, { from: "user" });
     } catch (error) {
       tactPathIsDefined = false;
-      if (error instanceof Error && error.message.includes('is required')) {
-        const tempPath = '/tmp/contract.tact';
+      if (error instanceof Error && error.message.includes("is required")) {
+        const tempPath = "/tmp/contract.tact";
         argsStr.push(tempPath);
         await command.parseAsync(argsStr, { from: "user" });
       } else {

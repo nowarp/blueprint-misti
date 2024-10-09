@@ -95,7 +95,7 @@ export async function extractProjectInfo(
   blueprintCompilePath: string,
 ): Promise<TactProjectInfo | undefined> {
   const filePath = path.resolve(__dirname, blueprintCompilePath);
-  console.log('Parsing', filePath);
+  console.log("Parsing", filePath);
   return parseCompileWrapper(filePath);
 }
 

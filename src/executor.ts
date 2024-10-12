@@ -49,7 +49,7 @@ export class MistiExecutor {
     args: Args,
     ui: UIProvider,
   ): Promise<MistiExecutor> | never {
-    let argsStr = argsToStringList(args).slice(1);
+    const argsStr = argsToStringList(args).slice(1);
 
     // Find and remove --blueprint-project argument
     // That's a blueprint-misti argument, not a Misti argument
@@ -65,25 +65,8 @@ export class MistiExecutor {
     }
 
     const command = createMistiCommand();
-
-    // XXX: This hack is required because Misti v0.4 requires a path to the
-    // project/contract to be specified in order to parse arguments.
-    let tactPathIsDefined = true;
-    const originalArgsStr = [...argsStr];
-    try {
-      await command.parseAsync(argsStr, { from: "user" });
-    } catch (error) {
-      tactPathIsDefined = false;
-      if (error instanceof Error && error.message.includes("is required")) {
-        const tempPath = "/tmp/contract.tact";
-        argsStr.push(tempPath);
-        await command.parseAsync(argsStr, { from: "user" });
-      } else {
-        throw error;
-      }
-    }
-    argsStr = originalArgsStr;
-
+    await command.parseAsync(argsStr, { from: "user" });
+    const tactPathIsDefined = command.args.length > 0;
     if (tactPathIsDefined) {
       // The path to the Tact configuration or contract is explicitly specified
       // in arguments (e.g. yarn blueprint misti path/to/contract.tact).
@@ -136,8 +119,6 @@ export class MistiExecutor {
   public async execute(): Promise<MistiResult> {
     this.ui.write(`${Sym.WAIT} Checking ${this.projectName}...\n`);
     setStdlibPath(this.args);
-    // ! is safe: it could not be undefined in Misti 0.4+
-    const result = (await runMistiCommand(this.args))!;
-    return result[1];
+    return (await runMistiCommand(this.args))[1];
   }
 }

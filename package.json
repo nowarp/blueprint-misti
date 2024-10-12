@@ -56,7 +56,7 @@
     "@ton/ton": ">=13.4.1"
   },
   "dependencies": {
-    "@nowarp/misti": "~0.4.0"
+    "@nowarp/misti": "~0.4.1"
   },
   "prettier": {
     "semi": true,

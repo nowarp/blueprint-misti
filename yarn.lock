@@ -1053,10 +1053,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nowarp/misti@~0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.4.0.tgz#427c04624dff1a91544fcdb48344290c1c1bcd80"
-  integrity sha512-YaeK25sTom5j0y6SJBom5vH1LJMWIerMV7OEL5trZhiSQ2W7PZ6CAAaKCEgXGXnPpUV2T1qK6S4aPQ6oTexIdQ==
+"@nowarp/misti@~0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.4.1.tgz#97af145c915f35eeb47a443c0b8c9da6aa649fd2"
+  integrity sha512-nzaHVywobbyZBhKrq9Haf1YaXO/5ZTFT858jSoGAI11/X6Owp3V6RTb3cWd9pWBi/I12nd/ZdW4bW5BeWCJong==
   dependencies:
     "@nowarp/souffle" "^0.1.2"
     "@tact-lang/compiler" "~1.5.1"
@@ -1327,10 +1327,10 @@
     prando "^6.0.1"
     zod "^3.22.4"
 
-"@tact-lang/compiler@^1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@tact-lang/compiler/-/compiler-1.5.2.tgz#eece10634091eb31fa2f1b5453ede867cf68af9e"
-  integrity sha512-i6FONPYpM4hYujmrhtyXtcNA7UkDOcgWbHUCFvHT4+RFwPFHlwbq7gdDWDP4dgW6uMLoNt+JUL/o62Ho+rJn0Q==
+"@tact-lang/compiler@~1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@tact-lang/compiler/-/compiler-1.5.1.tgz#2b82dd6f26c741989bf6270ccaf706f728ede5ac"
+  integrity sha512-pzszIP3vtDLMYT2dVO9U0siLBxxjgFUig95uKb/u2Y+MOByoBMyBIRxJlw1IoQUXYIFKGTPpBIhS3bHcLCkNTQ==
   dependencies:
     "@tact-lang/opcode" "^0.0.16"
     "@ton/core" "0.58.1"
@@ -1347,10 +1347,10 @@
     prando "^6.0.1"
     zod "^3.22.4"
 
-"@tact-lang/compiler@~1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@tact-lang/compiler/-/compiler-1.5.1.tgz#2b82dd6f26c741989bf6270ccaf706f728ede5ac"
-  integrity sha512-pzszIP3vtDLMYT2dVO9U0siLBxxjgFUig95uKb/u2Y+MOByoBMyBIRxJlw1IoQUXYIFKGTPpBIhS3bHcLCkNTQ==
+"@tact-lang/compiler@~1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@tact-lang/compiler/-/compiler-1.5.2.tgz#eece10634091eb31fa2f1b5453ede867cf68af9e"
+  integrity sha512-i6FONPYpM4hYujmrhtyXtcNA7UkDOcgWbHUCFvHT4+RFwPFHlwbq7gdDWDP4dgW6uMLoNt+JUL/o62Ho+rJn0Q==
   dependencies:
     "@tact-lang/opcode" "^0.0.16"
     "@ton/core" "0.58.1"

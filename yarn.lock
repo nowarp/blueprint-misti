@@ -1053,19 +1053,21 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nowarp/misti@~0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.4.1.tgz#97af145c915f35eeb47a443c0b8c9da6aa649fd2"
-  integrity sha512-nzaHVywobbyZBhKrq9Haf1YaXO/5ZTFT858jSoGAI11/X6Owp3V6RTb3cWd9pWBi/I12nd/ZdW4bW5BeWCJong==
+"@nowarp/misti@~0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.5.0.tgz#e25e882fba99fa6c37abd4557a7bdbcc3a7cd05a"
+  integrity sha512-gx1IO8+8YQEsU2M8TWJfQ24K55aIpCUkMzXNJuEe2fL/fECp76+4nx/2wAG8XjL2WNIB1CuL9vLcNWy2dzafIg==
   dependencies:
     "@nowarp/souffle" "^0.1.2"
     "@tact-lang/compiler" "~1.5.1"
+    "@ton/core" "~0.59.0"
     "@types/benchmark" "^2.1.5"
     "@types/fs-extra" "^11.0.4"
     "@types/json-bigint" "^1.0.4"
     benchmark "^2.1.4"
     commander "^12.0.0"
     fs-extra "^11.2.0"
+    ignore "^6.0.2"
     json-bigint "^1.0.0"
     ohm-js "^17.1.0"
     zod "^3.22.4"
@@ -1420,6 +1422,13 @@
   version "0.53.0"
   resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.53.0.tgz#9a2c101c4d2f48d0c9ec0e889b067da72d914df1"
   integrity sha512-tB5RxXFS6Z/ivmsqMn/eebEZmkWXIAz+hS1PDZXhbBkcvnBTknZ12g2AFrZtXyuvpm8O6SbL15UI/3NgkyIWzQ==
+  dependencies:
+    symbol.inspect "1.0.1"
+
+"@ton/core@~0.59.0":
+  version "0.59.0"
+  resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.59.0.tgz#58da9fcaa58e5a0c705b63baf1e86cab6e196689"
+  integrity sha512-LSIkGst7BoY7fMWshejzcH0UJnoW21JGlRrW0ch+6A7Xb/7EuekxgdKym7fHxcry6OIf6FoeFg97lJ960N/Ghg==
   dependencies:
     symbol.inspect "1.0.1"
 
@@ -3484,6 +3493,11 @@ ignore@^5.1.8, ignore@^5.2.0, ignore@^5.2.4, ignore@^5.3.1:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.3.2.tgz#3cd40e729f3643fd87cb04e50bf0eb722bc596f5"
   integrity sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==
+
+ignore@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-6.0.2.tgz#77cccb72a55796af1b6d2f9eb14fa326d24f4283"
+  integrity sha512-InwqeHHN2XpumIkMvpl/DCJVrAHgCsG5+cn1XlnLWGwtZBm8QJfSusItfrwx81CTp5agNZqpKU2J/ccC5nGT4A==
 
 import-fresh@^3.2.1, import-fresh@^3.3.0:
   version "3.3.0"

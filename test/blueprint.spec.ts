@@ -1,6 +1,8 @@
 import path from "path";
 import fs from "fs";
 import { extractProjectInfo, TactProjectInfo } from "../src/blueprint";
+import { MistiExecutor } from "../src/executor";
+import { UIProvider } from "@ton/blueprint";
 
 describe("extractProjectInfo", () => {
   const tempDir = path.join(__dirname, "../wrappers");
@@ -53,5 +55,16 @@ describe("extractProjectInfo", () => {
     await expect(extractProjectInfo(projectName)).rejects.toThrow(
       "FunC projects are not currently supported: https://github.com/nowarp/misti/issues/56",
     );
+  });
+});
+
+describe("MistiExecutor", () => {
+  it("should list available projects", async () => {
+    const uiProvider: UIProvider = {
+      write: jest.fn(),
+    };
+    const args = { _: [], "blueprint-list-projects": true };
+    const executor = await MistiExecutor.fromArgs(args, uiProvider);
+    expect(uiProvider.write).toHaveBeenCalledWith(expect.stringContaining("Available projects:"));
   });
 });

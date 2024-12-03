@@ -64,6 +64,14 @@ export class MistiExecutor {
       }
     }
 
+    // Handle --blueprint-list-projects argument
+    const listProjectsIndex = argsStr.indexOf("--blueprint-list-projects");
+    if (listProjectsIndex !== -1) {
+      const projects = await this.listProjects();
+      ui.write(`Available projects:\n${projects.join("\n")}`);
+      return new MistiExecutor("", [], ui);
+    }
+
     const command = createMistiCommand();
     await command.parseAsync(argsStr, { from: "user" });
     const tactPathIsDefined = command.args.length > 0;
@@ -114,6 +122,14 @@ export class MistiExecutor {
     const outPath = path.join(outDir, "tact.config.json");
     fs.writeFileSync(outPath, content);
     return outPath;
+  }
+
+  /**
+   * Lists available projects for Misti analysis.
+   */
+  private static async listProjects(): Promise<string[]> {
+    const compiles = await findCompiles();
+    return compiles.map((compile) => compile.name);
   }
 
   public async execute(): Promise<MistiResult> {

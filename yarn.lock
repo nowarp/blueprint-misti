@@ -1053,10 +1053,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nowarp/misti@~0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.5.0.tgz#e25e882fba99fa6c37abd4557a7bdbcc3a7cd05a"
-  integrity sha512-gx1IO8+8YQEsU2M8TWJfQ24K55aIpCUkMzXNJuEe2fL/fECp76+4nx/2wAG8XjL2WNIB1CuL9vLcNWy2dzafIg==
+"@nowarp/misti@~0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@nowarp/misti/-/misti-0.6.1.tgz#f90696780e0c05fe6fd6d7aef09fd9d5f11ac4e7"
+  integrity sha512-cKr4VjLnmKUi/mKfce3gpKK7YwMeIvyV5s5vFve4hGpoWrmYQQHskKZKGDKu0rPrGXpv5FhI17M0hvWVoGlCAQ==
   dependencies:
     "@nowarp/souffle" "^0.1.2"
     "@tact-lang/compiler" "~1.5.1"

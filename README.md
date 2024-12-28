@@ -32,6 +32,11 @@ It will run the analysis of the available project, if there is one, or show an i
 
 ![img](./img/select-project.png)
 
+To list all available projects for Misti analysis, use the following command:
+```bash
+yarn blueprint misti --blueprint-list-projects
+```
+
 See the [documentation](https://nowarp.io/tools/misti/) for the available configuration options.
 
 ## Resources

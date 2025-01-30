@@ -4,23 +4,25 @@ import { Sym } from "./util";
 import { MistiResult, resultToString } from "@nowarp/misti/dist/cli";
 
 /**
- * Outputs the Misti result using the UI provider.
+ * Outputs the Misti result using the UI provider and returns the exit code.
+ *
+ * Exit codes reference: https://nowarp.io/tools/misti/docs/tutorial/cli#exit-codes
  */
-function handleResult(result: MistiResult, ui: UIProvider): void {
+function handleResult(result: MistiResult, ui: UIProvider): number {
   const resultStr = resultToString(result, "plain");
   switch (result.kind) {
     case "warnings":
       ui.write(resultStr);
-      break;
+      return 1;
     case "error":
       ui.write(`${Sym.ERR} ${resultStr}`);
-      break;
+      return 2;
     case "ok":
       ui.write(`${Sym.OK} ${resultStr}`);
-      break;
+      return 0;
     case "tool":
       ui.write(resultStr);
-      break;
+      return 0;
   }
 }
 
@@ -28,7 +30,7 @@ export const misti: Runner = async (args: Args, ui: UIProvider) => {
   try {
     const executor = await MistiExecutor.fromArgs(args, ui);
     const result = await executor.execute();
-    handleResult(result, ui);
+    process.exit(handleResult(result, ui));
   } catch (err) {
     if (err instanceof Error) {
       ui.write(`${Sym.ERR} ${err.message}`);

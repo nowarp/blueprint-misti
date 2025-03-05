@@ -68,7 +68,7 @@ const runIntegrationTests = process.env.RUN_INTEGRATION_TESTS === "true";
         });
 
         // Check if the command executed successfully
-        expect(result).toContain("Misti analysis completed");
+        expect(result).toContain("No errors found");
       } catch (error) {
         console.error("Integration test failed:", error);
         throw error;

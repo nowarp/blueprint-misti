@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Exit codes according to documentation (https://nowarp.io/tools/misti/docs/tutorial/cli#exit-codes): Issue [#12](https://github.com/nowarp/blueprint-misti/issues/12)
+- Integration tests: PR [#14](https://github.com/nowarp/blueprint-misti/pull/14)
 
 ## [0.6.0] - 2024-12-22
 

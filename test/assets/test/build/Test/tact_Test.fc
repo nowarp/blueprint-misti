@@ -1,0 +1,330 @@
+#pragma version =0.4.6;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+;; tact_Test.headers.fc
+;;
+;; Header files for Test
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_context_get
+(int, slice, int, slice) __tact_context_get() inline;
+
+;; __tact_context_get_sender
+slice __tact_context_get_sender() inline;
+
+;; $Deploy$_load_without_opcode
+(slice, ((int))) $Deploy$_load_without_opcode(slice sc_0) inline;
+
+;; $DeployOk$_store
+builder $DeployOk$_store(builder build_0, (int) v) inline;
+
+;; $DeployOk$_store_cell
+cell $DeployOk$_store_cell((int) v) inline;
+
+;; $StateInit$_not_null
+((cell, cell)) $StateInit$_not_null(tuple v) inline;
+
+;; $Test$_contract_init
+tuple $Test$_contract_init() impure inline;
+
+;; $Test$_contract_load
+tuple $Test$_contract_load() impure inline;
+
+;; $Test$_contract_store
+() $Test$_contract_store(tuple v) impure inline;
+
+;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int $bounce, slice $to, int $value, int $mode, cell $body, cell $code, cell $data) inline;
+
+;; $Test$_fun_forward
+(tuple, ()) $Test$_fun_forward(tuple $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
+
+;; $Test$_fun_notify
+(tuple, ()) $Test$_fun_notify(tuple $self, cell $body) impure inline;
+
+;; $DeployOk$_constructor_queryId
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline;
+
+
+;; tact_Test.stdlib.fc
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_child_contract_codes;
+global int __tact_randomized;
+
+(int, slice, int, slice) __tact_context_get() inline {
+    return __tact_context;
+}
+
+slice __tact_context_get_sender() inline {
+    return __tact_context_sender;
+}
+
+forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm """
+    2 UNTUPLE
+""";
+
+int $global_myBalance() impure asm """
+    BALANCE FIRST
+""";
+
+() $global_nativeReserve(int $amount, int $mode) impure asm """
+    RAWRESERVE
+""";
+
+() $global_send((int, cell, cell, cell, int, slice, int) $params) impure asm """
+    NEWC
+    b{01} STSLICECONST  // store tag = $0 and ihr_disabled = true
+    1 STI               // store `bounce`
+    b{000} STSLICECONST // store bounced = false and src = addr_none
+    STSLICE             // store `to`
+    SWAP
+    STGRAMS             // store `value`
+    105 PUSHINT         // 1 + 4 + 4 + 64 + 32
+    STZEROES            // store currency_collection, ihr_fee, fwd_fee, created_lt and created_at
+    // → Stack state
+    // s0: Builder
+    // s1: `data`
+    // s2: `code`
+    // s3: `body`
+    // s4: `mode`
+
+    // Group 2: Placing the Builder after code and data, then checking those for nullability
+    s2 XCHG0
+    DUP2
+    ISNULL
+    SWAP
+    ISNULL
+    MUL // note that -1 * -1 wraps back to -1
+    // → Stack state
+    // s0: -1 (true) if `data` and `code` are both null, 0 (false) otherwise
+    // s1: `code`
+    // s2: `data`
+    // s3: Builder
+    // s4: `body`
+    // s5: `mode`
+
+    // Group 3: Left branch of the IFELSE, executed if s0 is -1 (true)
+    <{
+        DROP2 // drop `data` and `code`, since either of those is null
+        b{0} STSLICECONST
+    }> PUSHCONT
+
+    // Group 3: Right branch of the IFELSE, executed if s0 is 0 (false)
+    <{
+        // _ split_depth:(Maybe (## 5))
+        //   special:(Maybe TickTock)
+        //   code:(Maybe ^Cell)
+        //   data:(Maybe ^Cell)
+        //   library:(Maybe ^Cell)
+        // = StateInit;
+        ROT                // place message Builder on top
+        b{10} STSLICECONST // store Maybe = true, Either = false
+        // Start composing inlined StateInit
+        b{00} STSLICECONST // store split_depth and special first
+        STDICT             // store code
+        STDICT             // store data
+        b{0} STSLICECONST  // store library
+    }> PUSHCONT
+
+    // Group 3: IFELSE that does the branching shown above
+    IFELSE
+    // → Stack state
+    // s0: Builder
+    // s1: null or StateInit
+    // s2: `body`
+    // s3: `mode`
+
+    // Group 4: Finalizing the message
+    STDICT // store `body` as ref with an extra Maybe bit, since `body` might be null
+    ENDC
+    // → Stack state
+    // s0: Cell
+    // s1: `mode`
+
+    // Group 5: Sending the message, with `mode` on top
+    SWAP
+    SENDRAWMSG // https://github.com/tact-lang/tact/issues/1558
+""";
+
+(tuple, ()) $Test$_fun_forward(tuple $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
+    var ($self) = $self;
+    var ($init) = $init;
+    cell $code = null();
+    cell $data = null();
+    if ((~ null?($init))) {
+        var ($init2'code, $init2'data) = $StateInit$_not_null($init);
+        $code = $init2'code;
+        $data = $init2'data;
+    }
+    if (false) {
+        var ($ctx'bounceable, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+        int $balance = $global_myBalance();
+        int $balanceBeforeMessage = ($balance - $ctx'value);
+        if (($balanceBeforeMessage < 0)) {
+            $global_nativeReserve(0, 0);
+            $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, 130, $body, $code, $data));
+            return ($self, ());
+        }
+    }
+    $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, 66, $body, $code, $data));
+    return ($self, ());
+}
+
+(tuple, ()) $Test$_fun_notify(tuple $self, cell $body) impure inline {
+    var ($self) = $self;
+    $self~$Test$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return ($self, ());
+}
+
+;; tact_Test.storage.fc
+;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+((cell, cell)) $StateInit$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
+    return (vvv'code, vvv'data);
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell value:int257 to:address bounce:bool = SendParameters
+;;
+
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int $bounce, slice $to, int $value, int $mode, cell $body, cell $code, cell $data) inline {
+    return ($mode, $body, $code, $data, $value, $to, $bounce);
+}
+
+;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load_without_opcode(slice sc_0) inline {
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline {
+    return ($queryId);
+}
+
+;;
+;; Type: Test
+;; TLB: _  = Test
+;;
+
+tuple $Test$_contract_load() impure inline {
+    slice $sc = get_data().begin_parse();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return null();
+    }
+    else {
+        return $Test$_contract_init();
+    }
+}
+
+() $Test$_contract_store(tuple v) impure inline {
+    builder b = begin_cell();
+    b = b.store_int(true, 1);
+    set_data(b.end_cell());
+}
+
+;;
+;; Contract Test functions
+;;
+
+tuple $Test$_contract_init() impure inline {
+    tuple $self = null();
+    return $self;
+}
+
+;;
+;; Get methods of a Contract Test
+;;
+
+;; message opcode reader utility
+;; Returns 32 bit message opcode, otherwise throws the "Invalid incoming message" exit code
+(slice, int) ~load_opcode(slice s) asm( -> 1 0) "32 LDUQ 130 THROWIFNOT";
+;;
+;; Routing of a Contract Test
+;;
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    cs~skip_bits(2);
+    var msg_bounceable = cs~load_int(1);
+    var msg_bounced = cs~load_int(1);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounceable, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var $self = $Test$_contract_load();
+    
+    ;; Handle bounced messages
+    if (msg_bounced) { return (); }
+    var op = in_msg~load_opcode();
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var ($deploy'queryId) = in_msg~$Deploy$_load_without_opcode();
+        $self~$Test$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+        ;; Persist state
+        $Test$_contract_store($self);
+        return ();
+    }
+    
+    throw(130);
+}
+
+() __tact_selector_hack_asm() impure asm """
+@atend @ 1 {
+    execute current@ context@ current!
+    {
+        }END> b>
+        
+        <{
+            SETCP0 DUP
+            IFNOTJMP:<{
+                DROP over <s ref@ 0 swap @procdictkeylen idict@ { "internal shortcut error" abort } ifnot @addop
+            }>
+swap <s ref@
+            0 swap @procdictkeylen idict- drop
+            -1 swap @procdictkeylen idict- drop
+            65535 swap @procdictkeylen idict- drop
+
+            @procdictkeylen DICTPUSHCONST DICTIGETJMPZ 11 THROWARG
+        }> b>
+    } : }END>c
+    current@ context! current!
+} does @atend !
+""";
+() __tact_selector_hack() method_id(65535) {
+    return __tact_selector_hack_asm();
+}

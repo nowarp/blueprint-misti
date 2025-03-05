@@ -42,6 +42,12 @@ const runIntegrationTests = process.env.RUN_INTEGRATION_TESTS === "true";
         // Move into the project directory
         process.chdir(path.join(tempDir, "test-project"));
 
+        // Build blueprint-misti
+        console.log("Building blueprint-misti package...");
+        execSync(`yarn build`, {
+          stdio: "inherit",
+        });
+
         // Add our local package
         console.log("Adding local blueprint-misti package...");
         execSync(`yarn add ${cwd}`, {

@@ -21,6 +21,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "blueprint-test": "RUN_INTEGRATION_TESTS=true jest test/integration.spec.ts",
     "clean": "rm -rf dist",
     "fmt": "prettier --check src",
     "lint": "eslint src",
@@ -56,7 +57,7 @@
     "@ton/ton": ">=13.4.1"
   },
   "dependencies": {
-    "@nowarp/misti": "~0.6.1"
+    "@nowarp/misti": "^0.7.0"
   },
   "prettier": {
     "semi": true,

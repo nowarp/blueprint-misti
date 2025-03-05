@@ -51,9 +51,8 @@ jobs:
       run: yarn test
 
   integration-test:
-    needs: test
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout Blueprint Misti
       uses: actions/checkout@v2

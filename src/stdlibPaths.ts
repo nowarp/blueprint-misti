@@ -6,6 +6,7 @@
  */
 import path from "path";
 import fs from "fs";
+import { DEFAULT_STDLIB_PATH_ELEMENTS } from "@nowarp/misti/dist/internals/tact";
 
 const STDLIB_PATH_ARG = "--tact-stdlib-path";
 
@@ -40,7 +41,6 @@ function findDirectoryPath(
  * XXX: Touching paths below is not only dangerous; it should be considered illegal.
  */
 function setTactStdlibPath(): string {
-  const stdlibPathElements = ["@tact-lang", "compiler", "stdlib"];
   let distPathPrefix = __dirname.includes("/dist/")
     ? path.join("..", "..", "..", "..")
     : path.join("..", "..", "..");
@@ -65,7 +65,11 @@ function setTactStdlibPath(): string {
     }
   }
 
-  return path.resolve(__dirname, distPathPrefix, ...stdlibPathElements);
+  return path.resolve(
+    __dirname,
+    distPathPrefix,
+    ...DEFAULT_STDLIB_PATH_ELEMENTS,
+  );
 }
 
 /**

@@ -1,14 +1,14 @@
 import { Runner, Args, UIProvider } from "@ton/blueprint";
 import { MistiExecutor } from "./executor";
 import { Sym } from "./util";
-import { MistiResult, resultToString } from "@nowarp/misti/dist/cli";
+import { Result, resultToString } from "@nowarp/misti/dist/cli";
 
 /**
  * Outputs the Misti result using the UI provider and returns the exit code.
  *
  * Exit codes reference: https://nowarp.io/tools/misti/docs/tutorial/cli#exit-codes
  */
-function handleResult(result: MistiResult, ui: UIProvider): number {
+function handleResult(result: Result, ui: UIProvider): number {
   const resultStr = resultToString(result, "plain");
   switch (result.kind) {
     case "warnings":

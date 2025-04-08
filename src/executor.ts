@@ -7,7 +7,7 @@ import {
   argsToStringList,
 } from "./blueprint";
 import {
-  MistiResult,
+  Result,
   runMistiCommand,
   createMistiCommand,
 } from "@nowarp/misti/dist/cli";
@@ -116,7 +116,7 @@ export class MistiExecutor {
     return outPath;
   }
 
-  public async execute(): Promise<MistiResult> {
+  public async execute(): Promise<Result> {
     this.ui.write(`${Sym.WAIT} Checking ${this.projectName}...\n`);
     setStdlibPath(this.args);
     return (await runMistiCommand(this.args))[1];
